@@ -16,17 +16,20 @@ const CartSidebar = () => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [customerDetails, setCustomerDetails] = useState({ name: '', whatsapp: '' });
+  // Tambahkan 'notes' ke dalam state customerDetails
+  const [customerDetails, setCustomerDetails] = useState({ name: '', whatsapp: '', notes: '' });
 
-  const handleCheckoutSubmit = async (details: { name: string; whatsapp: string }) => {
+  // Perbarui tipe 'details' untuk menyertakan 'notes'
+  const handleCheckoutSubmit = async (details: { name: string; whatsapp: string; notes: string }) => {
     if (!user) {
       toast.error("Sesi Anda berakhir, silakan login kembali.");
       return;
     }
     setIsLoading(true);
     try {
+      // 'details' sekarang sudah berisi 'notes' dan akan dikirim ke submitOrder
       await submitOrder(cart, details, totalPrice, user.id);
-      setCustomerDetails(details);
+      setCustomerDetails(details); // Simpan semua detail, termasuk notes
       setIsCheckoutOpen(false);
       setIsReceiptOpen(true);
     } catch (error: any) {
@@ -40,24 +43,26 @@ const CartSidebar = () => {
     setIsLoading(true);
     let message = `🔔 *Pesanan Baru Masuk!*\n\n`;
     message += `*Nama:* ${customerDetails.name}\n`;
-    message += `*WhatsApp:* ${customerDetails.whatsapp}\n\n`;
-    message += `*Detail Pesanan:*\n`;
+    message += `*WhatsApp:* ${customerDetails.whatsapp}\n`;
+    // Tambahkan notes ke pesan Telegram jika ada
+    if (customerDetails.notes) {
+      message += `*Catatan:* ${customerDetails.notes}\n`;
+    }
+    message += `\n*Detail Pesanan:*\n`;
     cart.forEach(item => {
       message += `- ${item.name} (x${item.quantity}) = Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
     });
     message += `\n*Total:* Rp ${totalPrice.toLocaleString('id-ID')}`;
 
     try {
-      // --- PERUBAHAN DI SINI ---
       const response = await fetch('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           message: message,
-          customerWhatsapp: customerDetails.whatsapp // Kirim nomor WA secara terpisah
+          customerWhatsapp: customerDetails.whatsapp
         })
       });
-      // -------------------------
 
       if (!response.ok) throw new Error("Gagal mengirim notifikasi.");
 
@@ -137,7 +142,7 @@ const CartSidebar = () => {
         onClose={() => setIsReceiptOpen(false)}
         cart={cart}
         totalPrice={totalPrice}
-        customer={customerDetails}
+        customer={customerDetails} // customerDetails sekarang sudah berisi notes
         onSendToTelegram={handleSendTelegram}
         isSending={isLoading}
       />

@@ -1,23 +1,21 @@
 // File: src/components/ui/ReceiptModal.tsx
 
 import { X } from 'lucide-react';
-// --- PERBAIKI PATH IMPORT DI SINI ---
 import type { CartItem } from '../../contexts/CartContext';
 
+// Perbarui interface untuk menerima 'notes'
 interface ReceiptModalProps {
   isOpen: boolean;
   onClose: () => void;
   cart: CartItem[];
   totalPrice: number;
-  customer: { name: string; whatsapp: string };
+  customer: { name: string; whatsapp: string; notes?: string };
   onSendToTelegram: () => Promise<void>;
   isSending: boolean;
 }
 
 const ReceiptModal = ({ isOpen, onClose, cart, totalPrice, customer, onSendToTelegram, isSending }: ReceiptModalProps) => {
   if (!isOpen) return null;
-
-  // --- FUNGSI generateReceiptText DIHAPUS KARENA TIDAK DIGUNAKAN LAGI DI SINI ---
 
   return (
     <div className="fixed inset-0 bg-black/70 z-[10002] flex items-center justify-center p-4" onClick={onClose}>
@@ -31,6 +29,8 @@ const ReceiptModal = ({ isOpen, onClose, cart, totalPrice, customer, onSendToTel
         <div className="bg-gray-100 text-black p-4 rounded-md font-mono text-sm mb-6 whitespace-pre-wrap">
           <p>Nama: {customer.name}</p>
           <p>WhatsApp: {customer.whatsapp}</p>
+          {/* Tampilkan notes hanya jika ada isinya */}
+          {customer.notes && <p>Catatan: {customer.notes}</p>}
           <hr className="border-gray-400 my-2" />
           <p>Pesanan:</p>
           {cart.map(item => (

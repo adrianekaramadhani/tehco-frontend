@@ -3,12 +3,13 @@
 import { supabase } from "../config/supabaseClient";
 import type { CartItem } from "../contexts/CartContext";
 
+// Perbarui interface untuk menyertakan 'notes'
 interface CustomerDetails {
   name: string;
   whatsapp: string;
+  notes?: string; // '?' menandakan ini opsional
 }
 
-// LANGKAH 1: Tambahkan parameter 'userId' dengan tipe string
 export async function submitOrder(cart: CartItem[], customer: CustomerDetails, totalPrice: number, userId: string) {
   // Langkah 1: Masukkan data ke tabel 'orders'
   const { data: orderData, error: orderError } = await supabase
@@ -17,11 +18,12 @@ export async function submitOrder(cart: CartItem[], customer: CustomerDetails, t
       customer_name: customer.name,
       customer_whatsapp: customer.whatsapp,
       total_price: totalPrice,
-      status: 'Baru', // Status default
-      user_id: userId // <-- LANGKAH 2: Simpan ID pengguna yang sedang login
+      status: 'Baru',
+      user_id: userId,
+      notes: customer.notes // <-- Simpan notes ke database
     })
-    .select() // Minta agar data yang baru dibuat dikembalikan
-    .single(); // Karena kita hanya membuat satu order
+    .select()
+    .single();
 
   if (orderError) {
     console.error("Error creating order:", orderError);
@@ -52,4 +54,16 @@ export async function submitOrder(cart: CartItem[], customer: CustomerDetails, t
 
   // Jika semua berhasil, kembalikan data pesanan
   return orderData;
+}
+
+// Fungsi checkAuthStatus (jika masih ada) tidak perlu diubah
+export async function checkAuthStatus() {
+  const { data, error } = await supabase.rpc('get_current_user_id');
+  
+  if (error) {
+    console.error("Error checking auth status:", error);
+    return null;
+  }
+  
+  return data;
 }

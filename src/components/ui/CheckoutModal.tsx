@@ -6,7 +6,8 @@ import { X } from 'lucide-react';
 interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (details: { name: string; whatsapp: string }) => void;
+  // Perbarui tipe onSubmit untuk menyertakan 'notes'
+  onSubmit: (details: { name: string; whatsapp: string; notes: string }) => void;
   isLoading: boolean;
   userName?: string;
 }
@@ -14,16 +15,17 @@ interface CheckoutModalProps {
 const CheckoutModal = ({ isOpen, onClose, onSubmit, isLoading, userName }: CheckoutModalProps) => {
   const [name, setName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
+  const [notes, setNotes] = useState(''); // State baru untuk notes
 
-  // Efek untuk mengisi nama secara otomatis saat modal terbuka
   useEffect(() => {
     if (isOpen && userName) {
       setName(userName);
     }
-    // Mengosongkan form saat modal ditutup
+    // Reset semua form saat modal ditutup
     if (!isOpen) {
       setName('');
       setWhatsapp('');
+      setNotes('');
     }
   }, [isOpen, userName]);
 
@@ -32,7 +34,8 @@ const CheckoutModal = ({ isOpen, onClose, onSubmit, isLoading, userName }: Check
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name && whatsapp) {
-      onSubmit({ name, whatsapp });
+      // Kirim 'notes' saat submit
+      onSubmit({ name, whatsapp, notes });
     }
   };
 
@@ -57,7 +60,7 @@ const CheckoutModal = ({ isOpen, onClose, onSubmit, isLoading, userName }: Check
             />
           </div>
 
-          <div className="mb-8">
+          <div className="mb-4">
             <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-300 mb-2">Nomor WhatsApp</label>
             <input 
               type="tel" 
@@ -67,6 +70,19 @@ const CheckoutModal = ({ isOpen, onClose, onSubmit, isLoading, userName }: Check
               required 
               placeholder="cth: 08123456789" 
               className="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-teal-500" 
+            />
+          </div>
+
+          {/* --- INPUT NOTES BARU DITAMBAHKAN DI SINI --- */}
+          <div className="mb-8">
+            <label htmlFor="notes" className="block text-sm font-medium text-gray-300 mb-2">Catatan (Opsional)</label>
+            <textarea
+              id="notes"
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              placeholder="cth: es teh jangan terlalu manis, pakai es batu sedikit."
+              rows={3}
+              className="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
           </div>
 
