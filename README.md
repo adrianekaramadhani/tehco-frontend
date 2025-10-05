@@ -72,6 +72,6 @@ Untuk menjalankan proyek ini secara lokal, Anda memerlukan Node.js dan pnpm (ata
 **AI Support Explanation**
 Kecerdasan Buatan (AI) diimplementasikan dalam bentuk Asisten Virtual Pelanggan untuk meningkatkan interaktivitas dan efisiensi.
 
-Cara Penggunaan: AI diakses melalui Replicate API yang dipanggil dari sebuah Vercel Serverless Function (api/chatbot.ts). Pendekatan ini memastikan API Key tetap aman di sisi server. Sebuah system prompt yang mendetail memberikan AI persona, batasan pengetahuan (menu, lokasi, jam buka), dan aturan percakapan.
+Cara Penggunaan: AI diakses melalui Replicate API untuk model IBM Granite yang dipanggil dari sebuah Vercel Serverless Function (api/chatbot.ts). Pendekatan ini memastikan API Key tetap aman di sisi server. Sebuah system prompt yang mendetail memberikan AI persona, batasan pengetahuan (menu, lokasi, jam buka), dan aturan percakapan.
 
 Dampak pada Proyek: Penggunaan AI memberikan dampak nyata dengan menyediakan layanan pelanggan otomatis 24/7. Ini mengurangi beban kerja penjual untuk menjawab pertanyaan umum dan memberikan pengalaman yang lebih modern dan memuaskan bagi pelanggan, yang pada akhirnya meningkatkan keunggulan kompetitif aplikasi.
