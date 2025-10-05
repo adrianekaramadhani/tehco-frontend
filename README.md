@@ -44,8 +44,8 @@ Asisten AI: Chatbot yang ditenagai oleh model AI di Replicate, mampu menjawab pe
 Untuk menjalankan proyek ini secara lokal, Anda memerlukan Node.js dan pnpm (atau npm/yarn). <br>
 1. Clone Repositori <br>
    
-    git clone https://github.com/nama-anda/tehco-frontend.git <br> 
-    cd tehco-frontend <br>
+    git clone https://github.com/nama-anda/tehco-frontend.git 
+    cd tehco-frontend 
    
 2. Install dependencies:
    ```bash
